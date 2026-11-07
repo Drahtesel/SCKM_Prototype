@@ -1,11 +1,13 @@
 import { DATA_SOURCES, PILOT_REGION_BW } from '../config/dataSources';
 import type { WeatherContext } from '../types/knowledge';
 
+export const DEFAULT_WEATHER_SCENARIO_KEY = 'autumn_flush';
+
 export const WEATHER_SCENARIOS: Record<string, WeatherContext> = {
   autumn_flush: {
     source: 'scenario_simulation',
-    label: 'Szenario: Spätsommer-/Herbstschub nach Landregen',
-    fetchedAt: 'Simulationsprofil',
+    label: 'Simulation: Spätsommer-/Herbstregen',
+    fetchedAt: 'Statisches Profil',
     rain7dMm: 24.5,
     rain14dMm: 46.0,
     soilTemp0to7cmC: 14.2,
@@ -13,12 +15,21 @@ export const WEATHER_SCENARIOS: Record<string, WeatherContext> = {
   },
   spring_morel: {
     source: 'scenario_simulation',
-    label: 'Szenario: Milder April nach Frühlingsregen (Morchelzeit)',
-    fetchedAt: 'Simulationsprofil',
+    label: 'Simulation: Milder April (Morchelzeit)',
+    fetchedAt: 'Statisches Profil',
     rain7dMm: 16.0,
     rain14dMm: 31.0,
     soilTemp0to7cmC: 10.8,
     soilMoisture0to7cm: 0.31,
+  },
+  summer_dry: {
+    source: 'scenario_simulation',
+    label: 'Simulation: Trockenperiode im Hochsommer',
+    fetchedAt: 'Statisches Profil',
+    rain7dMm: 2.0,
+    rain14dMm: 6.5,
+    soilTemp0to7cmC: 21.5,
+    soilMoisture0to7cm: 0.14,
   },
 };
 
@@ -38,28 +49,34 @@ export async function fetchFreiburgLiveWeather(): Promise<WeatherContext> {
     throw new Error(`Open-Meteo HTTP ${response.status}`);
   }
 
-  const json = await response.json();
-  const precip: number[] = json.hourly?.precipitation ?? [];
-  const soilTemp: number[] = json.hourly?.soil_temperature_0_to_7cm ?? [];
-  const soilMoist: number[] = json.hourly?.soil_moisture_0_to_7cm ?? [];
+  const json = (await response.json()) as {
+    hourly?: {
+      precipitation?: Array<number | null>;
+      soil_temperature_0_to_7cm?: Array<number | null>;
+      soil_moisture_0_to_7cm?: Array<number | null>;
+    };
+  };
 
-  const validPrecip = precip.filter((v) => typeof v === 'number');
-  const rain14dMm = Number(validPrecip.reduce((acc, v) => acc + v, 0).toFixed(1));
-  const last7dHours = validPrecip.slice(-24 * 7);
-  const rain7dMm = Number(last7dHours.reduce((acc, v) => acc + v, 0).toFixed(1));
+  const precip = (json.hourly?.precipitation ?? []).filter((v): v is number => typeof v === 'number');
+  const soilTemp = (json.hourly?.soil_temperature_0_to_7cm ?? []).filter(
+    (v): v is number => typeof v === 'number',
+  );
+  const soilMoist = (json.hourly?.soil_moisture_0_to_7cm ?? []).filter(
+    (v): v is number => typeof v === 'number',
+  );
 
-  const latestSoilTemp =
-    [...soilTemp].reverse().find((v) => typeof v === 'number') ?? 9.5;
-  const latestSoilMoist =
-    [...soilMoist].reverse().find((v) => typeof v === 'number') ?? 0.28;
+  const rain14dMm = Number(precip.reduce((acc, v) => acc + v, 0).toFixed(1));
+  const rain7dMm = Number(precip.slice(-24 * 7).reduce((acc, v) => acc + v, 0).toFixed(1));
+  const latestTemp = soilTemp[soilTemp.length - 1] ?? 10.0;
+  const latestMoist = soilMoist[soilMoist.length - 1] ?? 0.28;
 
   return {
     source: 'live_open_meteo',
-    label: 'Live-Wetter Freiburg (DWD ICON / Open-Meteo)',
+    label: 'Live-Wetter Freiburg (Open-Meteo)',
     fetchedAt: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
     rain7dMm,
     rain14dMm,
-    soilTemp0to7cmC: Number(latestSoilTemp.toFixed(1)),
-    soilMoisture0to7cm: Number(latestSoilMoist.toFixed(3)),
+    soilTemp0to7cmC: Number(latestTemp.toFixed(1)),
+    soilMoisture0to7cm: Number(latestMoist.toFixed(3)),
   };
 }

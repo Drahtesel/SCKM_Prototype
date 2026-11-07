@@ -1,5 +1,7 @@
 export type LeafType = 'broadleaved' | 'needleleaved' | 'mixed';
 
+export type MapColorMode = 'suitability' | 'soil_ph' | 'forest_type';
+
 export interface HabitatProperties {
   id: string;
   name: string;
@@ -21,7 +23,7 @@ export interface WeatherContext {
   rain7dMm: number;
   rain14dMm: number;
   soilTemp0to7cmC: number;
-  soilMoisture0to7cm: number; // m³/m³
+  soilMoisture0to7cm: number;
 }
 
 export interface SpeciesRule {
@@ -54,7 +56,7 @@ export interface FactorExplanation {
 export interface SuitabilityEvaluation {
   speciesId: string;
   speciesName: string;
-  totalScore: number; // 0 - 100
+  totalScore: number;
   isExcluded: boolean;
   factors: FactorExplanation[];
   fieldTips: string[];
@@ -62,13 +64,10 @@ export interface SuitabilityEvaluation {
 
 export interface FieldObservation {
   id: string;
-  created_at: string;
-  author_alias: string;
-  habitat_id?: string | null;
-  latitude: number;
-  longitude: number;
-  observation_type: 'fungus_sighting' | 'indicator_plant' | 'habitat_change' | 'soil_hint';
-  species_or_indicator: string;
-  observed_ph_tendency: 'acidic' | 'neutral' | 'calcareous' | 'unknown';
-  notes?: string | null;
+  createdAt: string;
+  authorAlias: string;
+  habitatId: string;
+  observationType: 'fungus_sighting' | 'indicator_plant' | 'habitat_change';
+  title: string;
+  notes: string;
 }

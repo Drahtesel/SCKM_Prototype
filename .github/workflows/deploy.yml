@@ -1,4 +1,4 @@
-name: Build & Deploy to GitHub Pages
+name: Verify & Deploy to GitHub Pages
 
 on:
   push:
@@ -31,16 +31,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Typecheck & Unit Tests
-        run: |
-          npm run typecheck
-          npm run test
-
-      - name: Build Static Web-App (with Supabase Secrets if configured)
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npm run build
+      - name: Run Full Verification Loop (Lint + Typecheck + Tests + Build)
+        run: npm run verify
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
