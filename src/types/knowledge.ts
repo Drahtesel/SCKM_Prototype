@@ -2,6 +2,8 @@ export type LeafType = 'broadleaved' | 'needleleaved' | 'mixed';
 
 export type MapColorMode = 'suitability' | 'soil_ph' | 'forest_type';
 
+export type MapRenderStyle = 'parcels' | 'heatmap' | 'hybrid';
+
 export interface HabitatProperties {
   id: string;
   name: string;
@@ -13,6 +15,9 @@ export interface HabitatProperties {
   elevationM: number;
   aspect: string;
   waterRetention?: 'low' | 'medium' | 'high';
+  areaHa?: number;
+  centerLat?: number;
+  centerLon?: number;
   dataSource: string;
 }
 

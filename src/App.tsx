@@ -16,6 +16,7 @@ import { SpeciesRankingCard } from './components/SpeciesRankingCard';
 import type {
   HabitatProperties,
   MapColorMode,
+  MapRenderStyle,
   SpeciesRule,
   WeatherContext,
 } from './types/knowledge';
@@ -26,6 +27,7 @@ export default function App() {
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<string>(defaultSpecies.id);
   const [colorMode, setColorMode] = useState<MapColorMode>('suitability');
+  const [renderStyle, setRenderStyle] = useState<MapRenderStyle>('hybrid');
   const [weatherMode, setWeatherMode] = useState<string>(DEFAULT_WEATHER_SCENARIO_KEY);
   const [showLgrbWms, setShowLgrbWms] = useState<boolean>(false);
 
@@ -97,6 +99,8 @@ export default function App() {
           onSelectSpecies={setSelectedSpeciesId}
           colorMode={colorMode}
           onChangeColorMode={setColorMode}
+          renderStyle={renderStyle}
+          onChangeRenderStyle={setRenderStyle}
           weatherMode={weatherMode}
           onChangeWeatherMode={setWeatherMode}
           showLgrbWms={showLgrbWms}
@@ -133,6 +137,7 @@ export default function App() {
           onSelectHabitat={setSelectedHabitat}
           selectedSpecies={selectedSpecies}
           colorMode={colorMode}
+          renderStyle={renderStyle}
           activeWeather={activeWeather}
           showLgrbWms={showLgrbWms}
         />

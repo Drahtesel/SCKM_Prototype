@@ -7,6 +7,7 @@ import { MapLegend } from './MapLegend';
 import type {
   HabitatProperties,
   MapColorMode,
+  MapRenderStyle,
   SpeciesRule,
   WeatherContext,
 } from '../types/knowledge';
@@ -17,20 +18,31 @@ interface HabitatMapProps {
   onSelectHabitat: (habitat: HabitatProperties) => void;
   selectedSpecies: SpeciesRule;
   colorMode: MapColorMode;
+  renderStyle: MapRenderStyle;
   activeWeather: WeatherContext;
   showLgrbWms: boolean;
 }
 
-function getPhColor(ph: number): string {
-  if (ph < 4.8) return '#2563eb';
-  if (ph < 6.0) return '#0d9488';
-  if (ph < 6.8) return '#eab308';
-  return '#9333ea';
-}
-
-function getSuitabilityColor(score: number, isExcluded: boolean): string {
-  if (isExcluded || score < 25) return '#ef4444';
-  if (score < 60) return '#f59e0b';
+function resolveFeatureColor(
+  props: HabitatProperties,
+  colorMode: MapColorMode,
+  selectedSpecies: SpeciesRule,
+  activeWeather: WeatherContext,
+): string {
+  if (colorMode === 'soil_ph') {
+    if (props.soilPh < 4.8) return '#2563eb';
+    if (props.soilPh < 6.0) return '#0d9488';
+    if (props.soilPh < 6.8) return '#eab308';
+    return '#9333ea';
+  }
+  if (colorMode === 'forest_type') {
+    if (props.leafType === 'needleleaved') return '#14532d';
+    if (props.leafType === 'broadleaved') return '#65a30d';
+    return '#0f766e';
+  }
+  const ev = evaluateHabitatForSpecies(props, selectedSpecies, activeWeather);
+  if (ev.isExcluded || ev.totalScore < 25) return '#ef4444';
+  if (ev.totalScore < 60) return '#f59e0b';
   return '#16a34a';
 }
 
@@ -40,34 +52,43 @@ export function HabitatMap({
   onSelectHabitat,
   selectedSpecies,
   colorMode,
+  renderStyle,
   activeWeather,
   showLgrbWms,
 }: HabitatMapProps) {
-  const styleFeature = (feature?: Feature<Geometry, HabitatProperties>): PathOptions => {
+  const showHeatGlow = renderStyle === 'heatmap' || renderStyle === 'hybrid';
+
+  const styleHeatmapFeature = (feature?: Feature<Geometry, HabitatProperties>): PathOptions => {
+    if (!feature) return {};
+    const fillColor = resolveFeatureColor(
+      feature.properties,
+      colorMode,
+      selectedSpecies,
+      activeWeather,
+    );
+    return {
+      className: 'leaflet-heatmap-glow',
+      stroke: true,
+      color: fillColor,
+      weight: renderStyle === 'heatmap' ? 6 : 3,
+      opacity: renderStyle === 'heatmap' ? 0.65 : 0.35,
+      fillColor,
+      fillOpacity: renderStyle === 'heatmap' ? 0.78 : 0.42,
+    };
+  };
+
+  const styleParcelFeature = (feature?: Feature<Geometry, HabitatProperties>): PathOptions => {
     if (!feature) return {};
     const props = feature.properties;
     const isSelected = selectedHabitatId === props.id;
-
-    let fillColor = '#64748b';
-    if (colorMode === 'soil_ph') {
-      fillColor = getPhColor(props.soilPh);
-    } else if (colorMode === 'forest_type') {
-      fillColor =
-        props.leafType === 'needleleaved'
-          ? '#14532d'
-          : props.leafType === 'broadleaved'
-            ? '#65a30d'
-            : '#0f766e';
-    } else {
-      const ev = evaluateHabitatForSpecies(props, selectedSpecies, activeWeather);
-      fillColor = getSuitabilityColor(ev.totalScore, ev.isExcluded);
-    }
+    const fillColor = resolveFeatureColor(props, colorMode, selectedSpecies, activeWeather);
 
     return {
       color: isSelected ? '#0f172a' : '#ffffff',
-      weight: isSelected ? 3 : 1.5,
+      weight: isSelected ? 2.8 : renderStyle === 'heatmap' ? 0 : 0.8,
+      opacity: isSelected ? 1 : renderStyle === 'heatmap' ? 0 : 0.7,
       fillColor,
-      fillOpacity: 0.65,
+      fillOpacity: renderStyle === 'heatmap' ? (isSelected ? 0.25 : 0.01) : 0.52,
     };
   };
 
@@ -75,13 +96,15 @@ export function HabitatMap({
     const props = feature.properties;
     const ev = evaluateHabitatForSpecies(props, selectedSpecies, activeWeather);
     layer.bindTooltip(
-      `<strong>${props.name}</strong><br/>pH ${props.soilPh.toFixed(1)} • ${selectedSpecies.germanName}: ${ev.totalScore}%`,
+      `<strong>${props.name}</strong><br/>pH ${props.soilPh.toFixed(1)} • ${props.areaHa ?? ''} ha • ${selectedSpecies.germanName}: ${ev.totalScore}%`,
       { sticky: true },
     );
     layer.on({
       click: () => onSelectHabitat(props),
     });
   };
+
+  const layerKey = `${selectedSpecies.id}-${colorMode}-${renderStyle}-${activeWeather.label}-${selectedHabitatId ?? ''}`;
 
   return (
     <div className="relative h-full w-full">
@@ -103,11 +126,15 @@ export function HabitatMap({
           />
         )}
 
+        {geoData && showHeatGlow && (
+          <GeoJSON key={`heat-${layerKey}`} data={geoData} style={styleHeatmapFeature} />
+        )}
+
         {geoData && (
           <GeoJSON
-            key={`${selectedSpecies.id}-${colorMode}-${activeWeather.label}-${selectedHabitatId ?? ''}`}
+            key={`parcels-${layerKey}`}
             data={geoData}
-            style={styleFeature}
+            style={styleParcelFeature}
             onEachFeature={onEachHabitat}
           />
         )}
