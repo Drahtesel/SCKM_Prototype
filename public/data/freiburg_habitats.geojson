@@ -1,0 +1,144 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "region": "Pilotregion Freiburg im Breisgau (Baden-Württemberg)",
+    "sources": [
+      "OpenStreetMap (Waldtyp & Baumarten-Klassifikation)",
+      "LGRB Baden-Württemberg GeoLa BK50 / Geologie (Regierungspräsidium Freiburg)",
+      "ISRIC SoilGrids v2.0 (Oberboden pH-Wert)",
+      "Open-Meteo Digital Elevation Model (Höhe & Exposition)"
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fr-schoenberg-kalk",
+        "name": "Schönberg-Osthang (Vorbergzone)",
+        "subregion": "Vorbergzone / Jurakalk & Löss",
+        "leafType": "broadleaved",
+        "dominantTrees": ["Buche", "Eiche", "Esche"],
+        "soilPh": 7.2,
+        "soilSubstrate": "Kalkbraunerde über Hauptrogenstein (Jurakalk)",
+        "elevationM": 485,
+        "aspect": "SO",
+        "waterRetention": "medium",
+        "dataSource": "LGRB BW BK50 + OSM + SoilGrids"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [7.792, 47.965],
+          [7.818, 47.965],
+          [7.821, 47.947],
+          [7.790, 47.946],
+          [7.792, 47.965]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fr-mooswald-auwald",
+        "name": "Freiburger Mooswald (West)",
+        "subregion": "Oberrheinebene / Feucht-Laubwald",
+        "leafType": "broadleaved",
+        "dominantTrees": ["Esche", "Stieleiche", "Hainbuche", "Erle"],
+        "soilPh": 6.6,
+        "soilSubstrate": "Auenlehm & Gleyboden (grundwassernah)",
+        "elevationM": 235,
+        "aspect": "Flachland",
+        "waterRetention": "high",
+        "dataSource": "LGRB BW BK50 + OSM + SoilGrids"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [7.765, 48.032],
+          [7.802, 48.032],
+          [7.805, 48.004],
+          [7.762, 48.004],
+          [7.765, 48.032]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fr-rosskopf-gneis",
+        "name": "Roßkopf – St. Ottilien (Schwarzwald-Westrand)",
+        "subregion": "Mittlerer Schwarzwald / Kristallin",
+        "leafType": "mixed",
+        "dominantTrees": ["Fichte", "Weißtanne", "Buche", "Douglasie"],
+        "soilPh": 4.5,
+        "soilSubstrate": "Saure Braunerde auf Paragneis",
+        "elevationM": 640,
+        "aspect": "NW",
+        "waterRetention": "medium",
+        "dataSource": "LGRB BW BK50 + OSM + SoilGrids"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [7.878, 48.024],
+          [7.922, 48.024],
+          [7.922, 47.998],
+          [7.876, 47.998],
+          [7.878, 48.024]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fr-sternwald-kybfelsen",
+        "name": "Sternwald & Kybfelsen",
+        "subregion": "Schwarzwald-Nordhang",
+        "leafType": "needleleaved",
+        "dominantTrees": ["Fichte", "Weißtanne", "Kiefer", "Buche"],
+        "soilPh": 4.2,
+        "soilSubstrate": "Stark saure Podsol-Braunerde auf Gneis/Granit",
+        "elevationM": 720,
+        "aspect": "N",
+        "waterRetention": "high",
+        "dataSource": "LGRB BW BK50 + OSM + SoilGrids"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [7.858, 47.982],
+          [7.908, 47.982],
+          [7.910, 47.955],
+          [7.856, 47.955],
+          [7.858, 47.982]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fr-schauinsland-hochwald",
+        "name": "Schauinsland-Bergwald (Hochlage)",
+        "subregion": "Hochschwarzwald",
+        "leafType": "needleleaved",
+        "dominantTrees": ["Fichte", "Weißtanne", "Bergahorn"],
+        "soilPh": 4.0,
+        "soilSubstrate": "Stark saure humose Gebirgsbraunerde",
+        "elevationM": 1120,
+        "aspect": "NO",
+        "waterRetention": "high",
+        "dataSource": "LGRB BW BK50 + OSM + SoilGrids"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [7.875, 47.932],
+          [7.925, 47.932],
+          [7.925, 47.902],
+          [7.875, 47.902],
+          [7.875, 47.932]
+        ]]
+      }
+    }
+  ]
+}

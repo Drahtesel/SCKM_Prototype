@@ -1,0 +1,33 @@
+name: Geodaten-Pipeline (Pilotregion Freiburg BW)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-geodata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python Dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch & Enrich Freiburg BW Geodata (OSM + SoilGrids + Elevation)
+        run: python scripts/fetch_freiburg_geodata.py
+
+      - name: Commit Updated Habitat GeoJSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/freiburg_habitats.geojson
+          git diff --staged --quiet || git commit -m "chore(data): aktualisiere Geodaten für Pilotregion Freiburg (BW)"
+          git push

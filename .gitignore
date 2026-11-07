@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Environment variables (Supabase keys local)
+.env
+.env.*
+!.env.example
+
+# Python virtual environments & cache (Geodata pipeline)
+.venv
+venv
+__pycache__/
+*.pyc
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
