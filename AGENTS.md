@@ -54,4 +54,7 @@ npm run verify
 3. `npm run test` – `vitest run` (Unit- & Smoke-Tests der Wissenslogik)
 4. `npm run build` – Produktions-Build für GitHub Pages
 
-Eine Aufgabe gilt erst als erledigt, wenn `npm run verify` mit Exit-Code `0` durchläuft.
+### Browser-Verifikation bei UI-Änderungen (`chrome-devtools` MCP)
+- Bei neuen oder geänderten UI-/Karten-Features wird der Vite-Dev-Server gestartet (`http://localhost:5173`) und die Änderung automatisiert über den `chrome-devtools` MCP-Server überprüft (`take_snapshot` / `take_screenshot` + `list_console_messages` auf 0 Fehler prüfen).
+
+Eine Aufgabe gilt erst als erledigt, wenn `npm run verify` mit Exit-Code `0` durchläuft und UI-Änderungen im Browser geprüft wurden.

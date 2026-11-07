@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import type { FeatureCollection, Geometry } from 'geojson';
 import ontology from '../../knowledge/ontology.json';
 import { WEATHER_SCENARIOS } from '../../services/weatherService';
-import { evaluateHabitatForSpecies } from '../inferenceEngine';
+import { evaluateHabitatForSpecies, rankSpeciesForHabitat } from '../inferenceEngine';
 import type { HabitatProperties, SpeciesRule } from '../../types/knowledge';
 
 const geoJsonPath = resolve(__dirname, '../../../public/data/freiburg_habitats.geojson');
@@ -19,9 +19,9 @@ describe('Glass-Box Inference Engine & Dataset Smoke Tests', () => {
   const autumnWeather = WEATHER_SCENARIOS.autumn_flush!;
   const springWeather = WEATHER_SCENARIOS.spring_morel!;
 
-  it('validiert alle statischen Freiburg-Habitate gegen alle Pilzarten ohne Laufzeitfehler (Smoke-Test)', () => {
+  it('validiert alle statischen Freiburg-Habitate gegen alle 6 Pilzarten ohne Laufzeitfehler (Smoke-Test)', () => {
     expect(freiburgGeoJson.features.length).toBeGreaterThanOrEqual(5);
-    expect(speciesList.length).toBeGreaterThanOrEqual(4);
+    expect(speciesList).toHaveLength(6);
 
     for (const feature of freiburgGeoJson.features) {
       for (const species of speciesList) {
@@ -46,16 +46,14 @@ describe('Glass-Box Inference Engine & Dataset Smoke Tests', () => {
     expect(morelEval.isExcluded).toBe(true);
   });
 
-  it('bewertet kalkhaltigen Schönberg im Frühling optimal für Speisemorchel und schließt Fichten-Steinpilz aus', () => {
+  it('sortiert im Standort-Ranking (Ort -> Pilz) am Schönberg im Frühling Speisemorchel auf Platz 1', () => {
     const schoenberg = freiburgGeoJson.features.find(
       (f) => f.properties.id === 'fr-schoenberg-kalk',
     )!.properties;
 
-    const morelEval = evaluateHabitatForSpecies(schoenberg, morel, springWeather);
-    const porciniEval = evaluateHabitatForSpecies(schoenberg, porcini, autumnWeather);
-
-    expect(morelEval.isExcluded).toBe(false);
-    expect(morelEval.totalScore).toBeGreaterThanOrEqual(85);
-    expect(porciniEval.isExcluded).toBe(true);
+    const ranking = rankSpeciesForHabitat(schoenberg, speciesList, springWeather);
+    expect(ranking[0]?.speciesId).toBe('morchella_esculenta');
+    expect(ranking[0]?.totalScore).toBe(100);
+    expect(ranking[ranking.length - 1]?.isExcluded).toBe(true);
   });
 });

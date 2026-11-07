@@ -18,7 +18,7 @@ export function ExplanationCard({ habitat, evaluation }: ExplanationCardProps) {
       <div className="flex items-start justify-between gap-2">
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Glass-Box Ableitung
+            Glass-Box Ableitung ({evaluation.speciesName})
           </h2>
           <p className="text-sm font-semibold text-slate-900 mt-0.5">{habitat.name}</p>
         </div>
@@ -45,10 +45,14 @@ export function ExplanationCard({ habitat, evaluation }: ExplanationCardProps) {
             key={factor.criterion}
             className={`border-l-3 pl-2.5 text-xs ${BORDER_BY_STATUS[factor.status] ?? 'border-l-slate-400'}`}
           >
-            <div className="font-semibold text-slate-800">
-              {factor.label}: <span className="font-normal">{factor.rawFact}</span>
+            <div className="flex items-center justify-between font-semibold text-slate-800">
+              <span>{factor.label}</span>
+              <span className="text-[11px] font-medium text-slate-500">
+                {factor.status === 'exclusion' ? 'Ausschluss' : `+${factor.scoreDelta} Pkt.`}
+              </span>
             </div>
-            <div className="text-slate-600">{factor.ruleExplanation}</div>
+            <div className="text-slate-700">{factor.rawFact}</div>
+            <div className="text-slate-500">{factor.ruleExplanation}</div>
           </div>
         ))}
       </div>

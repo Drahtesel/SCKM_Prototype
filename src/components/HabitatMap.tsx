@@ -3,6 +3,7 @@ import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import type { Layer, PathOptions } from 'leaflet';
 import { DATA_SOURCES, PILOT_REGION_BW } from '../config/dataSources';
 import { evaluateHabitatForSpecies } from '../engine/inferenceEngine';
+import { MapLegend } from './MapLegend';
 import type {
   HabitatProperties,
   MapColorMode,
@@ -66,43 +67,53 @@ export function HabitatMap({
       color: isSelected ? '#0f172a' : '#ffffff',
       weight: isSelected ? 3 : 1.5,
       fillColor,
-      fillOpacity: 0.62,
+      fillOpacity: 0.65,
     };
   };
 
   const onEachHabitat = (feature: Feature<Geometry, HabitatProperties>, layer: Layer) => {
+    const props = feature.properties;
+    const ev = evaluateHabitatForSpecies(props, selectedSpecies, activeWeather);
+    layer.bindTooltip(
+      `<strong>${props.name}</strong><br/>pH ${props.soilPh.toFixed(1)} • ${selectedSpecies.germanName}: ${ev.totalScore}%`,
+      { sticky: true },
+    );
     layer.on({
-      click: () => onSelectHabitat(feature.properties),
+      click: () => onSelectHabitat(props),
     });
   };
 
   return (
-    <MapContainer
-      center={PILOT_REGION_BW.center}
-      zoom={PILOT_REGION_BW.defaultZoom}
-      className="h-full w-full"
-    >
-      <TileLayer url={DATA_SOURCES.osmTiles.url} attribution={DATA_SOURCES.osmTiles.attribution} />
+    <div className="relative h-full w-full">
+      <MapContainer
+        center={PILOT_REGION_BW.center}
+        zoom={PILOT_REGION_BW.defaultZoom}
+        className="h-full w-full"
+      >
+        <TileLayer url={DATA_SOURCES.osmTiles.url} attribution={DATA_SOURCES.osmTiles.attribution} />
 
-      {showLgrbWms && (
-        <WMSTileLayer
-          url={DATA_SOURCES.lgrbBwSoilWms.wmsUrl}
-          layers={DATA_SOURCES.lgrbBwSoilWms.layers}
-          format="image/png"
-          transparent={true}
-          opacity={0.45}
-          attribution={DATA_SOURCES.lgrbBwSoilWms.attribution}
-        />
-      )}
+        {showLgrbWms && (
+          <WMSTileLayer
+            url={DATA_SOURCES.lgrbBwSoilWms.wmsUrl}
+            layers={DATA_SOURCES.lgrbBwSoilWms.layers}
+            format="image/png"
+            transparent={true}
+            opacity={0.45}
+            attribution={DATA_SOURCES.lgrbBwSoilWms.attribution}
+          />
+        )}
 
-      {geoData && (
-        <GeoJSON
-          key={`${selectedSpecies.id}-${colorMode}-${activeWeather.label}-${selectedHabitatId ?? ''}`}
-          data={geoData}
-          style={styleFeature}
-          onEachFeature={onEachHabitat}
-        />
-      )}
-    </MapContainer>
+        {geoData && (
+          <GeoJSON
+            key={`${selectedSpecies.id}-${colorMode}-${activeWeather.label}-${selectedHabitatId ?? ''}`}
+            data={geoData}
+            style={styleFeature}
+            onEachFeature={onEachHabitat}
+          />
+        )}
+      </MapContainer>
+
+      <MapLegend colorMode={colorMode} speciesName={selectedSpecies.germanName} />
+    </div>
   );
 }

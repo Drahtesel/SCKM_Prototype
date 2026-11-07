@@ -36,8 +36,7 @@ Ein Nutzer wählt eine **Pilzart** (oder klickt ein **Waldgebiet** in der Region
 
 | Slice | Fokus (End-to-End vertikal) | Status |
 | :--- | :--- | :--- |
-| **Slice 0** | **Fundament & Best Practices:** Repo-Setup, `SPEC.md`, `AGENTS.md`, Linter/Typecheck/Smoke-Tests (`npm run verify`), modulares Grundgerüst mit statischen Freiburg-Daten. | ✅ Aktiv |
-| **Slice 1** | **Kern-Flow *Pilz $\rightarrow$ Ort* & DIKW-Layer-Vergleich:** Auswahl einer Pilzart, Umschalten zwischen Rohdaten-Layern (Boden-pH, Waldtyp) inkl. Karten-Legende und erklärbarer Detailkarte pro Waldgebiet. | ⏳ Geplant |
-| **Slice 2** | **Reverse-Flow *Ort $\rightarrow$ Pilz*:** Klick auf ein beliebiges Waldstück zeigt ein Ranking aller dort aktuell möglichen Pilzarten inkl. Ausschlussgründen. | ⏳ Geplant |
-| **Slice 3** | **Interaktiver Wissensgraph:** Visuelle Darstellung der Beziehungen (`Pilz ↔ Baum ↔ Boden-pH ↔ Zeigerpflanze`), synchron gekoppelt mit der Karte. | ⏳ Geplant |
-| **Slice 4** | **Lokales Erfahrungswissen (`localStorage`):** Einfaches Eintragen & Anzeigen lokaler Vor-Ort-Beobachtungen zur Demonstration des SECI-Wissenskreislaufs. | ⏳ Geplant |
+| **Slice 0** | **Fundament & Best Practices:** Repo-Setup, `SPEC.md`, `AGENTS.md`, Linter/Typecheck/Smoke-Tests (`npm run verify`), modulares Grundgerüst mit statischen Freiburg-Daten. | ✅ Erledigt |
+| **Slice 1** | **Kern-Flow *Pilz $\leftrightarrow$ Ort* & DIKW-Layer-Vergleich:** Auswahl einer Pilzart (6 Arten), Umschalten zwischen Rohdaten-Layern (Boden-pH, Waldtyp) inkl. Karten-Legende, Standort-Schnellwahl, Standort-Ranking (*Ort $\rightarrow$ Pilz*) und erklärbarer Detailkarte. | ✅ Aktiv |
+| **Slice 2** | **Interaktiver Wissensgraph:** Visuelle Darstellung der Beziehungen (`Pilz ↔ Baum ↔ Boden-pH ↔ Zeigerpflanze`), synchron gekoppelt mit der Karte. | ⏳ Geplant |
+| **Slice 3** | **Lokales Erfahrungswissen (`localStorage`):** Einfaches Eintragen & Anzeigen lokaler Vor-Ort-Beobachtungen zur Demonstration des SECI-Wissenskreislaufs. | ⏳ Geplant |

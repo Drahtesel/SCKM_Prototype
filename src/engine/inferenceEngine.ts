@@ -132,3 +132,16 @@ export function evaluateHabitatForSpecies(
     ],
   };
 }
+
+export function rankSpeciesForHabitat(
+  habitat: HabitatProperties,
+  speciesList: SpeciesRule[],
+  weather: WeatherContext,
+): SuitabilityEvaluation[] {
+  return speciesList
+    .map((sp) => evaluateHabitatForSpecies(habitat, sp, weather))
+    .sort((a, b) => {
+      if (a.isExcluded !== b.isExcluded) return a.isExcluded ? 1 : -1;
+      return b.totalScore - a.totalScore;
+    });
+}

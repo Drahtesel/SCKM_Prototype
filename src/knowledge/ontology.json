@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "domain": "Mykologisches Standort- und Erfahrungswissen (Baden-Württemberg)",
   "species": [
     {
@@ -37,21 +37,38 @@
       "lookalikeWarning": "Falscher Pfifferling (biegsame Lamellen statt Leisten) & giftiger Ölbaumpilz."
     },
     {
-      "id": "morchella_esculenta",
-      "germanName": "Speisemorchel",
-      "scientificName": "Morchella esculenta",
-      "edibility": "Speisepilz (nur gut erhitzt essbar)",
-      "preferredLeafTypes": ["broadleaved"],
-      "symbioticTrees": ["Esche", "Stieleiche", "Buche", "Hainbuche"],
-      "phMin": 6.2,
-      "phOptimalMin": 6.8,
-      "phOptimalMax": 7.8,
-      "phMax": 8.3,
-      "minRain14dMm": 18,
-      "optimalSoilTempMinC": 8,
-      "optimalSoilTempMaxC": 14,
-      "indicatorPlants": ["Bärlauch", "Schlüsselblume", "Weinbergschnecke (Kalkzeiger)"],
-      "lookalikeWarning": "Giftige Frühjahrslorchel (Gyromitra esculenta) – hirnartig gewundener statt wabenförmiger Hut."
+      "id": "imleria_badia",
+      "germanName": "Maronen-Röhrling",
+      "scientificName": "Imleria badia",
+      "edibility": "Speisepilz (sehr gut)",
+      "preferredLeafTypes": ["needleleaved", "mixed"],
+      "symbioticTrees": ["Fichte", "Kiefer", "Weißtanne"],
+      "phMin": 3.4,
+      "phOptimalMin": 3.8,
+      "phOptimalMax": 5.0,
+      "phMax": 5.6,
+      "minRain14dMm": 20,
+      "optimalSoilTempMinC": 9,
+      "optimalSoilTempMaxC": 18,
+      "indicatorPlants": ["Heidelbeere", "Schrebers Rotstängelmoos", "Sauerklee"],
+      "lookalikeWarning": "Gallenröhrling (blaut nicht an den Röhren; Marone blaut bei Druck auf die Röhren)."
+    },
+    {
+      "id": "sparassis_crispa",
+      "germanName": "Krause Glucke",
+      "scientificName": "Sparassis crispa",
+      "edibility": "Speisepilz (würzig, nussig)",
+      "preferredLeafTypes": ["needleleaved", "mixed"],
+      "symbioticTrees": ["Kiefer"],
+      "phMin": 3.6,
+      "phOptimalMin": 4.0,
+      "phOptimalMax": 5.2,
+      "phMax": 5.8,
+      "minRain14dMm": 20,
+      "optimalSoilTempMinC": 10,
+      "optimalSoilTempMaxC": 19,
+      "indicatorPlants": ["Alte Waldkiefern (> 50 Jahre)", "Heidelbeere", "Besenheide"],
+      "lookalikeWarning": "Breitblättrige Glucke (an Tanne/Eiche, seifenartiger Geruch im Alter)."
     },
     {
       "id": "boletus_reticulatus",
@@ -69,6 +86,23 @@
       "optimalSoilTempMaxC": 23,
       "indicatorPlants": ["Waldmeister", "Buschwindröschen"],
       "lookalikeWarning": "Wurzelnder Bitterröhrling (auf Kalkböden) & giftiger Satansröhrling."
+    },
+    {
+      "id": "morchella_esculenta",
+      "germanName": "Speisemorchel",
+      "scientificName": "Morchella esculenta",
+      "edibility": "Speisepilz (nur gut erhitzt essbar)",
+      "preferredLeafTypes": ["broadleaved"],
+      "symbioticTrees": ["Esche", "Stieleiche", "Buche", "Hainbuche"],
+      "phMin": 6.2,
+      "phOptimalMin": 6.8,
+      "phOptimalMax": 7.8,
+      "phMax": 8.3,
+      "minRain14dMm": 18,
+      "optimalSoilTempMinC": 8,
+      "optimalSoilTempMaxC": 14,
+      "indicatorPlants": ["Bärlauch", "Schlüsselblume", "Weinbergschnecke (Kalkzeiger)"],
+      "lookalikeWarning": "Giftige Frühjahrslorchel (Gyromitra esculenta) – hirnartig gewundener statt wabenförmiger Hut."
     }
   ]
 }
