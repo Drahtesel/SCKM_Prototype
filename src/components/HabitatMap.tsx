@@ -3,6 +3,7 @@ import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import type { Layer, PathOptions } from 'leaflet';
 import { DATA_SOURCES, PILOT_REGION_BW } from '../config/dataSources';
 import { evaluateHabitatForSpecies } from '../engine/inferenceEngine';
+import { doesHabitatMatchGraphNode } from '../engine/knowledgeGraph';
 import { MapLegend } from './MapLegend';
 import type {
   HabitatProperties,
@@ -17,6 +18,8 @@ interface HabitatMapProps {
   selectedHabitatId: string | null;
   onSelectHabitat: (habitat: HabitatProperties) => void;
   selectedSpecies: SpeciesRule;
+  speciesList: SpeciesRule[];
+  focusedGraphNodeId: string | null;
   colorMode: MapColorMode;
   renderStyle: MapRenderStyle;
   activeWeather: WeatherContext;
@@ -51,6 +54,8 @@ export function HabitatMap({
   selectedHabitatId,
   onSelectHabitat,
   selectedSpecies,
+  speciesList,
+  focusedGraphNodeId,
   colorMode,
   renderStyle,
   activeWeather,
@@ -81,14 +86,22 @@ export function HabitatMap({
     if (!feature) return {};
     const props = feature.properties;
     const isSelected = selectedHabitatId === props.id;
+    const matchesGraphFilter = doesHabitatMatchGraphNode(props, focusedGraphNodeId, speciesList);
+    const dimmedByGraph = Boolean(focusedGraphNodeId && !matchesGraphFilter);
     const fillColor = resolveFeatureColor(props, colorMode, selectedSpecies, activeWeather);
 
     return {
-      color: isSelected ? '#0f172a' : '#ffffff',
-      weight: isSelected ? 2.8 : renderStyle === 'heatmap' ? 0 : 0.8,
-      opacity: isSelected ? 1 : renderStyle === 'heatmap' ? 0 : 0.7,
+      color: isSelected ? '#0f172a' : matchesGraphFilter ? '#0284c7' : '#ffffff',
+      weight: isSelected ? 2.8 : matchesGraphFilter ? 2.2 : renderStyle === 'heatmap' ? 0 : 0.8,
+      opacity: isSelected || matchesGraphFilter ? 1 : renderStyle === 'heatmap' ? 0 : 0.7,
       fillColor,
-      fillOpacity: renderStyle === 'heatmap' ? (isSelected ? 0.25 : 0.01) : 0.52,
+      fillOpacity: dimmedByGraph
+        ? 0.14
+        : renderStyle === 'heatmap'
+          ? isSelected || matchesGraphFilter
+            ? 0.38
+            : 0.01
+          : 0.56,
     };
   };
 
@@ -104,7 +117,7 @@ export function HabitatMap({
     });
   };
 
-  const layerKey = `${selectedSpecies.id}-${colorMode}-${renderStyle}-${activeWeather.label}-${selectedHabitatId ?? ''}`;
+  const layerKey = `${selectedSpecies.id}-${colorMode}-${renderStyle}-${activeWeather.label}-${selectedHabitatId ?? ''}-${focusedGraphNodeId ?? ''}`;
 
   return (
     <div className="relative h-full w-full">

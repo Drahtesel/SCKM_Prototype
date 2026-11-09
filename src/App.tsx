@@ -12,6 +12,7 @@ import { ControlPanel } from './components/ControlPanel';
 import { ExplanationCard } from './components/ExplanationCard';
 import { HabitatMap } from './components/HabitatMap';
 import { HabitatSelector } from './components/HabitatSelector';
+import { KnowledgeGraphPanel } from './components/KnowledgeGraphPanel';
 import { SpeciesRankingCard } from './components/SpeciesRankingCard';
 import type {
   HabitatProperties,
@@ -36,6 +37,8 @@ export default function App() {
   );
   const [selectedHabitat, setSelectedHabitat] = useState<HabitatProperties | null>(null);
   const [liveWeather, setLiveWeather] = useState<WeatherContext | null>(null);
+  const [focusedGraphNodeId, setFocusedGraphNodeId] = useState<string | null>(null);
+  const [isGraphExpanded, setIsGraphExpanded] = useState<boolean>(true);
 
   useEffect(() => {
     fetch(DATA_SOURCES.localGeoJson.path)
@@ -130,16 +133,32 @@ export default function App() {
         )}
       </aside>
 
-      <main className="relative h-full w-full">
-        <HabitatMap
-          geoData={geoData}
-          selectedHabitatId={selectedHabitat?.id ?? null}
-          onSelectHabitat={setSelectedHabitat}
-          selectedSpecies={selectedSpecies}
-          colorMode={colorMode}
-          renderStyle={renderStyle}
-          activeWeather={activeWeather}
-          showLgrbWms={showLgrbWms}
+      <main className="flex h-full w-full flex-col overflow-hidden">
+        <div className="relative flex-1 min-h-0 w-full">
+          <HabitatMap
+            geoData={geoData}
+            selectedHabitatId={selectedHabitat?.id ?? null}
+            onSelectHabitat={setSelectedHabitat}
+            selectedSpecies={selectedSpecies}
+            speciesList={speciesList}
+            focusedGraphNodeId={focusedGraphNodeId}
+            colorMode={colorMode}
+            renderStyle={renderStyle}
+            activeWeather={activeWeather}
+            showLgrbWms={showLgrbWms}
+          />
+        </div>
+
+        <KnowledgeGraphPanel
+          speciesList={speciesList}
+          selectedSpeciesId={selectedSpeciesId}
+          onSelectSpecies={setSelectedSpeciesId}
+          selectedHabitat={selectedHabitat}
+          habitats={habitats}
+          focusedNodeId={focusedGraphNodeId}
+          onFocusNode={setFocusedGraphNodeId}
+          isExpanded={isGraphExpanded}
+          onToggleExpanded={() => setIsGraphExpanded((prev) => !prev)}
         />
       </main>
     </div>

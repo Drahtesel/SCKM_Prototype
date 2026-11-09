@@ -4,6 +4,29 @@ export type MapColorMode = 'suitability' | 'soil_ph' | 'forest_type';
 
 export type MapRenderStyle = 'parcels' | 'heatmap' | 'hybrid';
 
+export type GraphNodeCategory = 'soil_ph' | 'tree' | 'species' | 'indicator';
+
+export interface KnowledgeGraphNode {
+  id: string;
+  label: string;
+  sublabel?: string;
+  category: GraphNodeCategory;
+  x: number;
+  y: number;
+  isSelectedSpecies: boolean;
+  isConnectedToActive: boolean;
+  isPresentInHabitat: boolean;
+}
+
+export interface KnowledgeGraphEdge {
+  id: string;
+  sourceId: string;
+  targetId: string;
+  relationLabel: string;
+  isHighlighted: boolean;
+  isSatisfiedInHabitat: boolean;
+}
+
 export interface HabitatProperties {
   id: string;
   name: string;

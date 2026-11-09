@@ -37,6 +37,6 @@ Ein Nutzer wählt eine **Pilzart** (oder klickt ein **Waldgebiet** in der Region
 | Slice | Fokus (End-to-End vertikal) | Status |
 | :--- | :--- | :--- |
 | **Slice 0** | **Fundament & Best Practices:** Repo-Setup, `SPEC.md`, `AGENTS.md`, Linter/Typecheck/Smoke-Tests (`npm run verify`), modulares Grundgerüst mit statischen Freiburg-Daten. | ✅ Erledigt |
-| **Slice 1** | **Kern-Flow *Pilz $\leftrightarrow$ Ort* & DIKW-Layer-Vergleich:** Auswahl einer Pilzart (6 Arten), Umschalten zwischen Rohdaten-Layern (Boden-pH, Waldtyp) inkl. Karten-Legende, Standort-Schnellwahl, Standort-Ranking (*Ort $\rightarrow$ Pilz*) und erklärbarer Detailkarte. | ✅ Aktiv |
-| **Slice 2** | **Interaktiver Wissensgraph:** Visuelle Darstellung der Beziehungen (`Pilz ↔ Baum ↔ Boden-pH ↔ Zeigerpflanze`), synchron gekoppelt mit der Karte. | ⏳ Geplant |
+| **Slice 1** | **Kern-Flow *Pilz $\leftrightarrow$ Ort* & DIKW-Layer-Vergleich:** Auswahl einer Pilzart (6 Arten), Umschalten zwischen Rohdaten-Layern (Boden-pH, Waldtyp) inkl. Karten-Legende, 75 OSM-Waldparzellen (Hybrid/Heatmap) und Standort-Ranking. | ✅ Erledigt |
+| **Slice 2** | **Interaktiver Wissensgraph:** Visuelle Darstellung der Beziehungen (`Boden-pH ↔ Baum ↔ Pilz ↔ Zeigerpflanze`), synchron gekoppelt mit Karte und aktivem Standort. | ✅ Aktiv |
 | **Slice 3** | **Lokales Erfahrungswissen (`localStorage`):** Einfaches Eintragen & Anzeigen lokaler Vor-Ort-Beobachtungen zur Demonstration des SECI-Wissenskreislaufs. | ⏳ Geplant |
